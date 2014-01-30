@@ -1,5 +1,6 @@
 Build.PL
 Changes
+examples/ca.crt
 examples/dump.psgi
 examples/hello.psgi
 examples/localhost.crt
@@ -12,12 +13,8 @@ inc/Module/Build/My.pm
 lib/Plack/Handler/Starlight.pm
 lib/Starlight.pm
 lib/Starlight/Server.pm
-LICENSE
-Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
-META.json
-META.yml
 README
 README.md
 script/starlight.pl
@@ -32,6 +29,9 @@ t/07remote_port.t
 t/08chunked_req.t
 t/09chunked_zero_length.t
 t/10unix_domain_socket.t
+t/50_server.t
+t/60_ssl.t
+t/61_ssl_largebody.t
 xt/check_changes.t
 xt/consistent_version_numbers.t
 xt/copyright.t
@@ -50,4 +50,8 @@ xt/pod_spellrc
 xt/pod_syntax.t
 xt/portability_files.t
 xt/signature.t
+Makefile.PL
+LICENSE
+META.yml
+META.json
 SIGNATURE    Added here by Module::Build

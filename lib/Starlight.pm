@@ -8,7 +8,8 @@ Starlight - a light and pure-Perl PSGI/Plack HTTP server with pre-forks
 
   $ plackup -s Starlight --port=80 [options] your-app.psgi
 
-  $ plackup -s Starlight --port=443 --ssl=1 --ssl-key-file=file.key --ssl-cert-file=file.crt [options] your-app.psgi
+  $ plackup -s Starlight --port=443 --ssl=1 --ssl-key-file=file.key
+                         --ssl-cert-file=file.crt [options] your-app.psgi
 
   $ plackup -s Starlight --port=80 --ipv6 [options] your-app.psgi
 
@@ -35,7 +36,7 @@ use 5.008_001;
 use strict;
 use warnings;
 
-our $VERSION = '0.0100';
+our $VERSION = '0.0200';
 
 1;
 

@@ -3,11 +3,13 @@ package Starlight::Server;
 use strict;
 use warnings;
 
-our $VERSION = '0.0100';
+our $VERSION = '0.0200';
 
 use Config;
 
 use Carp ();
+use Errno ();
+use File::Spec;
 use Plack;
 use Plack::HTTPParser qw( parse_http_request );
 use IO::Socket::INET;
@@ -16,7 +18,6 @@ use HTTP::Status;
 use List::Util qw(max sum);
 use Plack::Util;
 use Plack::TempBuffer;
-use POSIX qw(EINTR EAGAIN EWOULDBLOCK);
 use Socket qw(IPPROTO_TCP TCP_NODELAY);
 
 use Try::Tiny;
@@ -27,6 +28,11 @@ use constant CHUNKSIZE        => 64 * 1024;
 use constant MAX_REQUEST_SIZE => 131072;
 
 use constant HAS_INET6        => eval { AF_INET6 && socket my $ipv6_socket, AF_INET6, SOCK_DGRAM, 0 };
+
+use constant EINTR            => exists &Errno::EINTR ? &Errno::EINTR : -1;
+use constant EAGAIN           => exists &Errno::EAGAIN ? &Errno::EAGAIN : -1;
+use constant EWOULDBLOCK      => exists &Errno::EWOULDBLOCK ? &Errno::EWOULDBLOCK : -1;
+
 
 my $null_io = do { open my $io, "<", \""; $io }; #"
 
@@ -48,6 +54,9 @@ sub new {
         ipv6                 => $args{ipv6},
         ssl_key_file         => $args{ssl_key_file},
         ssl_cert_file        => $args{ssl_cert_file},
+        daemonize            => $args{daemonize},
+        pid                  => $args{pid},
+        error_log            => $args{error_log},
         min_reqs_per_child   => (
             defined $args{min_reqs_per_child}
                 ? $args{min_reqs_per_child} : undef,
@@ -156,7 +165,7 @@ sub setup_listener {
     }
 
     if ($self->{_listen_sock_is_unix} && not $args{Local} =~ /^\0/) {
-        push @{$self->{_unlink}}, $args{Local};
+        $self->_add_to_unlink(File::Spec->rel2abs($args{Local}));
     }
 
     $self->{server_ready}->({ %$self, proto => $self->{ssl} ? 'https' : 'http' });
@@ -564,6 +573,11 @@ sub write_all {
         $off += $ret;
     }
     return length $buf;
+}
+
+sub _add_to_unlink {
+    my ($self, $filename) = @_;
+    push @{$self->{_unlink}}, File::Spec->rel2abs($filename);
 }
 
 sub DESTROY {

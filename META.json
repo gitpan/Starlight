@@ -5,7 +5,7 @@
       "Piotr Roszatycki <dexter@cpan.org>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4204",
+   "generated_by" : "Module::Build version 0.4203",
    "license" : [
       "perl_5"
    ],
@@ -32,15 +32,15 @@
    "provides" : {
       "Plack::Handler::Starlight" : {
          "file" : "lib/Plack/Handler/Starlight.pm",
-         "version" : "0.0100"
+         "version" : "0.0200"
       },
       "Starlight" : {
          "file" : "lib/Starlight.pm",
-         "version" : "0.0100"
+         "version" : "0.0200"
       },
       "Starlight::Server" : {
          "file" : "lib/Starlight/Server.pm",
-         "version" : "0.0100"
+         "version" : "0.0200"
       }
    },
    "release_status" : "stable",
@@ -55,5 +55,5 @@
          "url" : "http://github.com/dex4er/Starlight"
       }
    },
-   "version" : "0.0100"
+   "version" : "0.0200"
 }
