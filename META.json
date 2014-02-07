@@ -2,7 +2,9 @@
    "abstract" : "a light and pure-Perl PSGI/Plack HTTP server with pre-forks",
    "author" : [
       "Piotr Roszatycki <dexter@cpan.org>",
-      "Piotr Roszatycki <dexter@cpan.org>"
+      "Piotr Roszatycki <dexter@cpan.org>",
+      "Jeremy Howard <j+daemonize@howard.fm>",
+      "Paul Seamons <paul@seamons.com>"
    ],
    "dynamic_config" : 1,
    "generated_by" : "Module::Build version 0.4203",
@@ -32,15 +34,15 @@
    "provides" : {
       "Plack::Handler::Starlight" : {
          "file" : "lib/Plack/Handler/Starlight.pm",
-         "version" : "0.0200"
+         "version" : "0.0300"
       },
       "Starlight" : {
          "file" : "lib/Starlight.pm",
-         "version" : "0.0200"
+         "version" : "0.0300"
       },
       "Starlight::Server" : {
          "file" : "lib/Starlight/Server.pm",
-         "version" : "0.0200"
+         "version" : "0.0300"
       }
    },
    "release_status" : "stable",
@@ -55,5 +57,5 @@
          "url" : "http://github.com/dex4er/Starlight"
       }
    },
-   "version" : "0.0200"
+   "version" : "0.0300"
 }

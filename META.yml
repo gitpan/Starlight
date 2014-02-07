@@ -3,6 +3,8 @@ abstract: 'a light and pure-Perl PSGI/Plack HTTP server with pre-forks'
 author:
   - 'Piotr Roszatycki <dexter@cpan.org>'
   - 'Piotr Roszatycki <dexter@cpan.org>'
+  - 'Jeremy Howard <j+daemonize@howard.fm>'
+  - 'Paul Seamons <paul@seamons.com>'
 build_requires:
   HTTP::Tiny: 0
   Test::More: 0.88
@@ -17,13 +19,13 @@ name: Starlight
 provides:
   Plack::Handler::Starlight:
     file: lib/Plack/Handler/Starlight.pm
-    version: 0.0200
+    version: 0.0300
   Starlight:
     file: lib/Starlight.pm
-    version: 0.0200
+    version: 0.0300
   Starlight::Server:
     file: lib/Starlight/Server.pm
-    version: 0.0200
+    version: 0.0300
 requires:
   Plack: 0.992
   perl: 5.008001
@@ -31,4 +33,4 @@ resources:
   bugtracker: http://github.com/dex4er/Starlight/issues
   license: http://dev.perl.org/licenses/
   repository: http://github.com/dex4er/Starlight
-version: 0.0200
+version: 0.0300

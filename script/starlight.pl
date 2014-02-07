@@ -38,7 +38,7 @@ use 5.008_001;
 use strict;
 use warnings;
 
-our $VERSION = '0.0200';
+our $VERSION = '0.0300';
 
 use Plack::Runner;
 
@@ -123,6 +123,27 @@ Enables UNIX socket support. The L<IO::Socket::UNIX> module is required. The
 socket file have to be not yet created. The first character C<@> or C<\0> in
 the socket file name means that abstract socket address will be created.
 (default: none)
+
+=head2 --user
+
+Changes the user id or user name that the server process should switch to
+after binding to the port. The pid file, error log or unix socket also are
+created before changing privileges. This options is usually used if main
+process is started with root privileges beacause binding to the low-numbered
+(E<lt>1024) port. (default: none)
+
+=head2 --group
+
+Changes the group ids or group names that the server should switch to after
+binding to the port. The ids or names can be separated with comma or space
+character. (default: none)
+
+=head2 --umask
+
+Changes file mode creation mask. The L<perlfunc/umask> is an octal number
+representing disabled permissions bits for newly created files. It is usually
+C<022> when group shouldn't have permission to write or C<002> when group
+should have permission to write. (default: none)
 
 =head2 --daemonize
 
@@ -222,6 +243,12 @@ kazeburo
 Some code based on Plack:
 
 Tatsuhiko Miyagawa
+
+Some code based on Net::Server::Daemonize:
+
+Jeremy Howard <j+daemonize@howard.fm>
+
+Paul Seamons <paul@seamons.com>
 
 =head1 LICENSE
 

@@ -12,8 +12,28 @@ use FindBin;
 
 use Starlight::Server;
 
+if ($^O eq 'MSWin32' and $] >= 5.016 and $] < 5.019005 and not $ENV{PERL_TEST_BROKEN}) {
+    plan skip_all => 'Perl with bug RT#119003 on MSWin32';
+    exit 0;
+}
+
+if ($^O eq 'cygwin' and not $ENV{PERL_TEST_BROKEN}) {
+    plan skip_all => 'Broken on cygwin';
+    exit 0;
+}
+
 if (not eval { require IO::Socket::SSL; }) {
     plan skip_all => 'IO::Socket::SSL required';
+    exit 0;
+}
+
+if (not eval { require Net::SSLeay; Net::SSLeay->VERSION(1.49); }) {
+    plan skip_all => 'Net::SSLeay >= 1.49 required';
+    exit 0;
+}
+
+if (eval { require Acme::Override::INET; } ) {
+    plan skip_all => 'Acme::Override::INET is not supported';
     exit 0;
 }
 
@@ -37,6 +57,7 @@ test_tcp(
         ok $res->{success};
         like $res->{headers}{server}, qr/Starlight/;
         is $res->{content}, 'https';
+        sleep 1;
     },
     server => sub {
         my $port = shift;

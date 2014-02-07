@@ -3,12 +3,13 @@ package Plack::Handler::Starlight;
 use strict;
 use warnings;
 
-our $VERSION = '0.0200';
+our $VERSION = '0.0300';
 
 use base qw(Starlight::Server);
 
 use Carp ();
 use Config ();
+use English '-no_match_vars';
 use Fcntl ();
 use File::Spec;
 use POSIX ();
@@ -57,6 +58,8 @@ sub run {
 
     warn "*** starting main process $$" if DEBUG;
     $self->setup_listener();
+
+    $self->_setup_privileges();
 
     local $SIG{PIPE} = 'IGNORE';
 
@@ -130,96 +133,6 @@ sub run {
             $self->accept_loop($app, $self->_calc_reqs_per_child());
             $self->_sleep($self->{spawn_interval});
         }
-    }
-}
-
-sub _daemonize {
-    my $self = shift;
-
-    if ($^O eq 'MSWin32') {
-        foreach my $arg (qw(daemonize pid)) {
-            die "$arg parameter is not supported on this platform ($^O)\n" if $self->{$arg};
-        }
-    }
-
-    my ($pidfh, $pidfile);
-    if ($self->{pid}) {
-        $pidfile = File::Spec->rel2abs($self->{pid});
-        if (defined *Fcntl::O_EXCL{CODE}) {
-            sysopen $pidfh, $pidfile, Fcntl::O_WRONLY|Fcntl::O_CREAT|Fcntl::O_EXCL
-                                               or die "Cannot open pid file: $self->{pid}: $!\n";
-        } else {
-            open $pidfh, '>', $pidfile         or die "Cannot open pid file: $self->{pid}: $!\n";
-        }
-    }
-
-    if (defined $self->{error_log}) {
-        open STDERR, '>>', $self->{error_log}  or die "Cannot open error log file: $self->{error_log}: $!\n";
-    }
-
-    if ($self->{daemonize}) {
-
-        chdir File::Spec->rootdir              or die "Cannot chdir to root directory: $!\n";
-
-        open STDIN,  '<', File::Spec->devnull  or die "Cannot open null device for reading: $!\n";
-        open STDOUT, '>', File::Spec->devnull  or die "Cannot open null device for writing: $!\n";
-
-        defined(my $pid = fork)                or die "Cannot fork: $!\n";
-        if ($self->{pid} and $pid) {
-            print $pidfh "$pid\n"              or die "Cannot write pidfile $self->{pid}: $!\n";
-            close $pidfh;
-            exit;
-        }
-
-        close $pidfh if $pidfh;
-
-        if ($Config::Config{d_setsid}) {
-            POSIX::setsid()                    or die "Cannot setsid: $!\n";
-        }
-
-        if (not defined $self->{error_log}) {
-            open STDERR, '>&', \*STDOUT        or die "Cannot dup null device for writing: $!\n";
-        }
-    }
-
-    if ($pidfile) {
-        $self->_add_to_unlink($pidfile);
-    }
-
-    return;
-}
-
-sub _sleep {
-    my ($self, $t) = @_;
-    select undef, undef, undef, $t if $t;
-}
-
-sub _create_process {
-    my ($self, $app) = @_;
-    my $pid = fork;
-    return warn "cannot fork: $!" unless defined $pid;
-
-    if ($pid == 0) {
-        warn "*** process $$ starting" if DEBUG;
-        eval {
-            $self->accept_loop($app, $self->_calc_reqs_per_child());
-        };
-        warn $@ if $@;
-        warn "*** process $$ ending" if DEBUG;
-        exit 0;
-    } else {
-        $self->{processes}->{$pid} = 1;
-    }
-}
-
-sub _calc_reqs_per_child {
-    my $self = shift;
-    my $max = $self->{max_reqs_per_child};
-    if (my $min = $self->{min_reqs_per_child}) {
-        srand((rand() * 2 ** 30) ^ $$ ^ time);
-        return $max - int(($max - $min + 1) * rand);
-    } else {
-        return $max;
     }
 }
 
