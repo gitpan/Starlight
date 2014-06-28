@@ -38,7 +38,7 @@ use 5.008_001;
 use strict;
 use warnings;
 
-our $VERSION = '0.0301';
+our $VERSION = '0.0302';
 
 use Plack::Runner;
 
@@ -160,6 +160,10 @@ Specify the pid file path. Use it with C<-D|--daemonize> option.
 Specify the pathname of a file where the error log should be written. This
 enables you to still have access to the errors when using C<--daemonize>.
 (default: none)
+
+=head2 -q, --quiet
+
+Suppress the message about starting a server.
 
 =for readme continue
 

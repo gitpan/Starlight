@@ -3,18 +3,18 @@ require 5.008001;
 use ExtUtils::MakeMaker;
 WriteMakefile
 (
+  'NAME' => 'Starlight',
   'EXE_FILES' => [
                    'script/starlight.pl'
                  ],
+  'VERSION_FROM' => 'script/starlight.pl',
   'PL_FILES' => {},
   'PREREQ_PM' => {
-                   'Test::TCP' => '0.15',
-                   'Test::More' => '0.88',
                    'HTTP::Tiny' => 0,
-                   'Plack' => '0.992'
+                   'Test::TCP' => '0.15',
+                   'Plack' => '0.992',
+                   'Test::More' => '0.88'
                  },
-  'INSTALLDIRS' => 'site',
-  'NAME' => 'Starlight',
-  'VERSION_FROM' => 'script/starlight.pl'
+  'INSTALLDIRS' => 'site'
 )
 ;
