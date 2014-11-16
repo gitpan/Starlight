@@ -7,7 +7,7 @@
       "Paul Seamons <paul@seamons.com>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4205",
+   "generated_by" : "Module::Build version 0.421",
    "license" : [
       "perl_5"
    ],
@@ -34,15 +34,15 @@
    "provides" : {
       "Plack::Handler::Starlight" : {
          "file" : "lib/Plack/Handler/Starlight.pm",
-         "version" : "0.0302"
+         "version" : "0.0303"
       },
       "Starlight" : {
          "file" : "lib/Starlight.pm",
-         "version" : "0.0302"
+         "version" : "0.0303"
       },
       "Starlight::Server" : {
          "file" : "lib/Starlight/Server.pm",
-         "version" : "0.0302"
+         "version" : "0.0303"
       }
    },
    "release_status" : "stable",
@@ -57,5 +57,5 @@
          "url" : "http://github.com/dex4er/Starlight"
       }
    },
-   "version" : "0.0302"
+   "version" : "0.0303"
 }
